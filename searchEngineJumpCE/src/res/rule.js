@@ -1463,6 +1463,91 @@ var rules = [
             where: 'afterEnd'
         }
     },
+
+    //其它（我添加的） BEGIN
+    {name: "StartPage网页搜索",
+        url: /^https?:\/\/startpage\.com\/do\/search/,
+        enabled: true,
+        engineList: "web",
+        style: '\
+            padding-left:5px;\
+            border-top:1px solid #D9E1F7;\
+            border-bottom:1px solid #D9E1F7;\
+            margin-top:5px;\
+        ',
+        insertIntoDoc: {
+            keyword: 'css;input#query_top',
+            target: 'css;#tod_wrap',
+            where: 'beforeEnd',
+        },
+    },
+    {name:"ArchPkgs",
+        url:/^https?:\/\/www\.archlinux\.org\/packages\/\?.*?&?q=/i,
+        enabled:true,
+        engineList:"软件",
+        style:'\
+            padding-left:5px;\
+            border-top:1px solid #D9E1F7;\
+            border-bottom:1px solid #D9E1F7;\
+            margin-top:5px;\
+        ',
+        insertIntoDoc:{
+            keyword:'//input[@name="q"]',
+            target:'css;#pkglist-search',
+            where:'afterEnd',
+        },
+    },
+    {name:"ArchWiki",
+        url:/^https?:\/\/wiki\.archlinux\.org\/index\.php\?.*?&?search=/i,
+        enabled:true,
+        engineList:"知识",
+        style:'\
+            padding-left:5px;\
+            border-top:1px solid #D9E1F7;\
+            border-bottom:1px solid #D9E1F7;\
+            margin-top:5px;\
+        ',
+        insertIntoDoc:{
+            keyword:'//input[@name="search"]',
+            target:'css;.searchresults',
+            where:'beforeBegin',
+        },
+    },
+    {name:"AUR",
+        url:/^https?:\/\/aur\.archlinux\.org\/packages\/\?.*?&?K=/i,
+        enabled:true,
+        engineList:"软件",
+        style:'\
+            padding-left:5px;\
+            border-top:1px solid #D9E1F7;\
+            border-bottom:1px solid #D9E1F7;\
+            margin-top:5px;\
+        ',
+        insertIntoDoc:{
+            keyword:'//input[@name="K"]',
+            target:'css;#pkglist-results',
+            where:'beforeBegin',
+        },
+    },
+    {name:"火狐扩展",
+        url:/^https?:\/\/addons\.mozilla\.org\/.*?search/i,
+        enabled:true,
+        engineList:"软件",
+        style:'\
+            padding-left:5px;\
+            color:#D9E1F7;\
+            border-top:1px solid #191919;\
+            border-bottom:1px solid #191919;\
+            margin-top:5px;\
+        ',
+        insertIntoDoc:{
+            keyword:'css;input#search-q',
+            target:'//div[@class="amo-header"]',
+            where:'afterEnd',
+        },
+    },
+    //其它（我添加的） END
+
 ];
 
 rules.default = {

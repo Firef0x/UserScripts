@@ -89,6 +89,7 @@ function openPrefs(){
                     <option value="custom">用户版本</option>\
                     <option value="simple">简单版本</option>\
                     <option value="my">详细版本</option>\
+                    <option value="firef0x">Firef0x版本</option>\
                     <option value="wenke">文科版本</option>\
                     <option value="ted423">ted423版本</option>\
                 </select>\

@@ -2,6 +2,7 @@
 var engineListData = {
     custom: '',
     my: <%= res['my.js'] %>,
+    firef0x: <%= res['firef0x.js'] %>,
     simple: <%= res['simple.js'] %>,
     wenke: <%= res['wenke.js'] %>,
     ted423: <%= res['ted423.js'] %>,
