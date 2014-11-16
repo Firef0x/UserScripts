@@ -304,13 +304,13 @@ var siteInfo=[
 
 	// 需要 xhr 获取的
 	{name: '优美图',
-		url: /http:\/\/www\.topit\.me\//,
+		url: /http:\/\/(?:www\.)?topit\.me\//,
 		getImage: function(img, a) {  // 如果有 xhr，则应该返回 xhr 的 url
-			var oldsrc = this.src;
-			if (a && oldsrc.match(/topit\.me\/.*\.jpg$/)) {
+			if (a && a.href.match(/topit\.me\/item\/\d+/)) {
 				return a.href;
 			}
 		},
+		lazyAttr: 'data-original',  // 延迟加载技术让后面的图片是 blank.gif
 		xhr: {
 			q: ['a[download]', 'a#item-tip'],
 		}
@@ -319,12 +319,13 @@ var siteInfo=[
 
 // 通配型规则,无视站点.
 var tprules=[
-	function(img,a){ // 解决新的dz论坛的原图获取方式.
-		var reg=/(.+\/attachments?\/.+)\.thumb\.\w{2,5}$/i;
-		var oldsrc=this.src;
-		if (!oldsrc) return;
-		var newsrc=oldsrc.replace(reg,'$1');
-		if(oldsrc!=newsrc)return newsrc;
+	function(img, a) { // 解决新的dz论坛的原图获取方式.
+		var reg = /(.+\/attachments?\/.+)\.thumb\.\w{2,5}$/i;
+		var oldsrc = this.src;
+		if (oldsrc && reg.test(oldsrc)) {
+			var newsrc = oldsrc.replace(reg, '$1');
+			return oldsrc != newsrc ? newsrc : null;
+		}
 	},
 ];
 
@@ -335,7 +336,8 @@ Rule.Imagus = {};
 
 /**
  * 兼容 Mouseover Popup Image Viewer 脚本的规则（非完全）
- * 1、新增了特殊的替换模式：已 r; 开头
+ * 1、新增了特殊的替换模式：以 r; 开头。
+ * 2、已去除 http:// 头，后面会加上。
  */
 Rule.MPIV = [
 	// 图片
@@ -400,7 +402,7 @@ Rule.MPIV = [
 		s: "http://$1/$2"
 	},
 
-	// 论坛
+	// 论坛 BBS
 	{name: "firefox 扩展中心",
 		d: "addons.mozilla.org",
 		r: "addons.cdn.mozilla.net/user-media/previews/thumbs/",
@@ -412,7 +414,15 @@ Rule.MPIV = [
 		s: "r;www.firefox.net.cn/attachment/"
 	},
 
-	// 游戏
+	// 软件 SoftWare
+	{name: "非凡软件站",
+		d: "www.crsky.com",
+		r: /pic\.crsky\.com.*_s\.gif$/i,
+		s: '/_s././',
+		example: "http://www.crsky.com/soft/5357.html",
+	},
+
+	// 游戏 Game
 	{name: "天极网",
 		d: "game.yesky.com",
 		r: /_\d+x\d+\.([a-z]+)$/i,
@@ -426,7 +436,7 @@ Rule.MPIV = [
 	    example: "http://dota2.sgamer.com/albums/201407/8263_330866.html",
 	},
 
-	// sex 漫画
+	// 漫画
 	{name: "nhentai",
 	    d: "nhentai.net",
 	    r: /\/(\d+)t(\.[a-z]+)$/i,
