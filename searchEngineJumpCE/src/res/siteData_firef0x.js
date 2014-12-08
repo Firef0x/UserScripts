@@ -2,7 +2,8 @@
     Google, https://www.google.com.hk/search?hl=en-US&newwindow=1&nfpr=1&safe=off&ie=utf-8&oe=utf-8&q=%s
     // Google, https://www.google.com/ncr#num=30&newwindow=1&safe=off&hl=zh-CN&q=%s
     // wen.lu, https://wen.lu/search?q=%s&hl=zh-CN&safe=off&ie=utf-8, www.google.com.hk
-    百度, http://www.baidu.com/s?wd=%s&ie=utf-8
+    // awk.so, https://awk.so/#num=30&newwindow=1&q=%s&hl=zh-CN&safe=off&ie=utf-8, www.google.com.hk
+    百度, https://www.baidu.com/s?wd=%s&ie=utf-8
     必应, https://cn.bing.com/search?q=%s
     360, http://www.so.com/s?ie=utf-8&q=%s
     // 搜狗, http://www.sogou.com/web?query=%s
@@ -86,7 +87,8 @@
     bt 天堂, http://www.bttiantang.com/s.php?q=%s
     我爱P2P, http://www.byhh.org/?topic_title=%s
     VeryCD, http://www.verycd.com/search/folders/%s
-    射手字幕, http://www.shooter.cn/search/%s
+    // 射手字幕, http://www.shooter.cn/search/%s
+    字幕, http://www.subom.net/search/%s
     BT-ed2000-下载搜索
         simpledCD, http://simplecd.me/search/entry/?query=%s
         ed2000, http://www.ed2000.com/FileList.asp?SearchWord=%s

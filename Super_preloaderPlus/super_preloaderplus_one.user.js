@@ -4,7 +4,7 @@
 // @namespace    https://github.com/ywzhaiqi
 // @description  预读+翻页..全加速你的浏览体验...
 // @author       ywzhaiqi && NLF(原作者)
-// @version      6.4.6
+// @version      6.4.8
 // @homepageURL  https://greasyfork.org/scripts/293-super-preloaderplus-one
 
 // @grant        GM_addStyle
@@ -40,8 +40,8 @@
 
 // 主要用于 chrome 原生下检查更新，也可用于手动检查更新
 var scriptInfo = {
-    version: '6.4.6',
-    updateTime: '2014/9/26',
+    version: '6.4.8',
+    updateTime: '2014/11/17',
     homepageURL: 'https://greasyfork.org/scripts/293-super-preloaderplus-one',
     downloadUrl: 'https://greasyfork.org/scripts/293-super-preloaderplus-one/code/Super_preloaderPlus_one.user.js',
     metaUrl: 'https://greasyfork.org/scripts/293-super-preloaderplus-one/code/Super_preloaderPlus_one.meta.js',
@@ -57,9 +57,9 @@ if (window.name === 'mynovelreader-iframe') {
 // 如果是取出下一页使用的iframe window
 if (window.name === 'superpreloader-iframe') { // 搜狗,iframe里面怎么不加载js啊?
     // 去掉了原版的另一种方法，因为新版本 chrome 已经支持。旧版本 chrome iframe里面 无法访问window.parent,返回undefined
-    
+
     var domloaded = function (){  // 滚动到底部,针对,某些使用滚动事件加载图片的网站.
-        window.scroll(window.scrollX, 99999); 
+        window.scroll(window.scrollX, 99999);
         window.parent.postMessage('superpreloader-iframe:DOMLoaded', '*');
     };
     if(window.opera){
@@ -73,13 +73,6 @@ if (window.name === 'superpreloader-iframe') { // 搜狗,iframe里面怎么不�
 
 
 // GM 兼容
-var GM_log = this.GM_log,
-    GM_getValue = this.GM_getValue,
-    GM_setValue = this.GM_setValue,
-    GM_registerMenuCommand = this.GM_registerMenuCommand,
-    GM_xmlhttpRequest = this.GM_xmlhttpRequest,
-    GM_openInTab = this.GM_openInTab,
-    GM_addStyle = this.GM_addStyle;
 
 gmCompatible();
 
@@ -108,6 +101,7 @@ var prefs={
     sepStartN: 2,            // 翻页导航上的,从几开始计数.(貌似有人在意这个,所以弄个开关出来,反正简单.-_-!!)
 
     // 新增或修改的
+    forceTargetWindow: GM_getValue('forceTargetWindow', true),  // 下一页的链接设置成在新标签页打开
     debug: GM_getValue('debug', false),
     enableHistory: GM_getValue('enableHistory', false),    // 把下一页链接添加到历史记录
     autoGetPreLink: false,   // 一开始不自动查找上一页链接，改为调用时再查找
@@ -208,9 +202,9 @@ var SITEINFO=[
             maxpage: 66,                                     //最多翻页数量(可选)
             manualA: false,                                  //是否使用手动翻页.
             HT_insert: ['//div[@id="res"]',2],               //插入方式此项为一个数组: [节点xpath或CSS选择器,插入方式(1：插入到给定节点之前;2：附加到给定节点的里面;)](可选);
-            //HT_insert:['css;div#res',2], 
+            //HT_insert:['css;div#res',2],
             lazyImgSrc: 'imgsrc',
-            // 新增的自定义样式。下面这个是调整 Google 下一页可能出现的图片排列问题。 
+            // 新增的自定义样式。下面这个是调整 Google 下一页可能出现的图片排列问题。
             stylish: 'hr.rgsep{display:none;}' +
                 '.rg_meta{display:none}.bili{display:inline-block;margin:0 6px 6px 0;overflow:hidden;position:relative;vertical-align:top}._HG{margin-bottom:2px;margin-right:2px}',
             documentFilter: function(doc){
@@ -228,6 +222,9 @@ var SITEINFO=[
                     if (elem.className != oClassName)
                         elem.className = oClassName;
                 });
+            },
+            filter: function() {  // 在添加内容到页面后运行
+
             },
             startFilter: function(win, doc) {  // 只作用一次
                 // 移除 Google 重定向
@@ -263,7 +260,7 @@ var SITEINFO=[
         preLink:'//p[@id="page"]/a[contains(text(),"上一页")][@href]',
         autopager: {
             pageElement: 'css;div#content_left > *',
-            HT_insert:['css;div#content_left',2], 
+            HT_insert:['css;div#content_left',2],
             replaceE: 'css;#page',
             stylish: '.autopagerize_page_info, div.sp-separator {margin-bottom: 10px !important;}',
             startFilter: function(win) {
@@ -1189,7 +1186,7 @@ var SITEINFO=[
         autopager: {
             pageElement: '//table[@class="torrents"]',
         }
-    },        
+    },
     {name: '葡萄 :: 种子',
         url: /^https:\/\/pt\.sjtu\.edu\.cn\/torrents\.php/i,
         exampleUrl: 'https://pt.sjtu.edu.cn/torrents.php',
@@ -1215,7 +1212,7 @@ var SITEINFO=[
         }
     },
     {name: '麦田',
-        url: /^http:\/\/pt\.nwsuaf6\.edu\.cn\/torrents\.php/i,         
+        url: /^http:\/\/pt\.nwsuaf6\.edu\.cn\/torrents\.php/i,
         exampleUrl: 'http://hdcmct.org/torrents.php',
         nextLink: '//b[contains(text(), "下一页")]/parent::a[@class="next"]',
         autopager: {
@@ -1873,7 +1870,7 @@ var SITEINFO=[
         pageElement: 'id("search_con")/div[@class="icon_list icon_list_165"]',
         exampleUrl: 'http://findicons.com/search/earth',
     },
-    
+
     // ========================= software ================================
     {name: '小众软件',
         url: 'http://www\\.appinn\\.com/',
@@ -2884,33 +2881,34 @@ var SITEINFO=[
             }
         }
     },
-    {name: 'SF在线漫画',
-        url:/http:\/\/comic\.sfacg\.com\/HTML\/.+/i,
-        siteExample:'http://comic.sfacg.com/HTML/HZDLQ/243/?p=2',
-        preLink:{
-            startAfter:'?p=',
-            inc:-1,
-            min:1,
-        },
-        nextLink:{
-            startAfter:'?p=',
-            mFails:[/http:\/\/comic\.sfacg\.com\/HTML\/.+\//i,'?p=1'],
-            inc:1,
-            isLast:function(doc,win,lhref){
-                var pageSel=doc.getElementById('pageSel');
-                if(pageSel){
-                    var s2os=pageSel.options;
-                    var s2osl=s2os.length;
-                    if(pageSel.selectedIndex==s2osl-1)return true;
-                }
-            },
-        },
-        autopager:{
-            pageElement:'//img[@id="curPic"]',
-            useiframe:true,
-            replaceE: 'id("Pages")'
-        }
-    },
+    // 已失效
+    // {name: 'SF在线漫画',
+    //     url:/http:\/\/comic\.sfacg\.com\/HTML\/.+/i,
+    //     siteExample:'http://comic.sfacg.com/HTML/ZXCHZ/001/#p=2',
+    //     preLink:{
+    //         startAfter:'#p=',
+    //         inc:-1,
+    //         min:1,
+    //     },
+    //     nextLink:{
+    //         startAfter:'#p=',
+    //         mFails:[/http:\/\/comic\.sfacg\.com\/HTML\/.+\//i,'#p=1'],
+    //         inc:1,
+    //         isLast:function(doc,win,lhref){
+    //             var pageSel=doc.getElementById('pageSel');
+    //             if(pageSel){
+    //                 var s2os=pageSel.options;
+    //                 var s2osl=s2os.length;
+    //                 if(pageSel.selectedIndex==s2osl-1)return true;
+    //             }
+    //         },
+    //     },
+    //     autopager:{
+    //         pageElement:'//img[@id="curPic"]',
+    //         useiframe:true,
+    //         replaceE: 'id("Pages")'
+    //     }
+    // },
     {name: '热血漫画',
         url: /^http:\/\/www\.rexuedongman\.com\/comic\//i,
         siteExample: 'http://www.rexuedongman.com/comic/2957/36463/index.html?p=2',
@@ -3018,7 +3016,7 @@ var SITEINFO=[
             useiframe: true,
             pageElement: '//img[@id="ComicPic"]',
         }
-    }, 
+    },
     {name: '99漫画new',
         url: /^http:\/\/(1mh|99mh|mh.99770|www.jmydm)\.(com|cc)\/.+/i,
         siteExample: 'http://99mh.com/comic/8436/117728/?p=1&s=0',
@@ -3175,7 +3173,7 @@ var SITEINFO=[
         siteExample:'http://bbs.9gal.com/read.php?tid=299016',
         nextLink:'auto;',
         autopager:{
-            pageElement:'//form[@method="post"]/a[@name]/following-sibling::div',  
+            pageElement:'//form[@method="post"]/a[@name]/following-sibling::div',
             replaceE:'//ul[@class="pages"]',
         },
     },
@@ -3274,7 +3272,7 @@ var SITEINFO=[
         nextLink: '//a[contains(text(),"→")]',
         pageElement: '//body/div/div/center',
     },
- 
+
 
     // ==================== 国外站点 ===================
     {name: 'AnandTech',
@@ -3548,8 +3546,11 @@ var SITEINFO=[
     {name: "github 搜索",
         url: "^https?://github\\.com/search",
         nextLink: "//div[@class='pagination']/a[@rel='next']",
-        pageElement: "id('code_search_results issue_search_results')|//div[@class='sort-bar']/following-sibling::*[following-sibling::span[@class='search-foot-note']]",
-        insertBefore: "//div[@class='pagination']"
+        autopager: {
+            pageElement: "id('code_search_results issue_search_results')|//div[@class='sort-bar']/following-sibling::*[following-sibling::span[@class='search-foot-note']]",
+            insertBefore: "//div[@class='pagination']",
+            stylish: 'li.repo-list-item { text-align: left; }'
+        }
     },
     {
         "url": "^https?://gist\\.github\\.com/",
@@ -3840,6 +3841,172 @@ var nextPageKey=[
 // 最好不要乱加，一些不规律的站点显示出来的数字也没有意义
 var REALPAGE_SITE_PATTERN = ['search?', 'search_', 'forum', 'thread'];
 
+
+//------------------------下面的不要管他-----------------
+///////////////////////////////////////////////////////////////////
+
+
+//----------------------------------
+// 主要用于 chrome 原生下检查更新，也可用于手动检查更新
+var scriptInfo = {
+    version: '6.4.8',
+    updateTime: '2014/11/17',
+    homepageURL: 'https://greasyfork.org/scripts/293-super-preloaderplus-one',
+    downloadUrl: 'https://greasyfork.org/scripts/293-super-preloaderplus-one/code/Super_preloaderPlus_one.user.js',
+    metaUrl: 'https://greasyfork.org/scripts/293-super-preloaderplus-one/code/Super_preloaderPlus_one.meta.js',
+};
+
+var setup = function(){
+    var d = document;
+    var on = function(node, e, f) {
+        node.addEventListener(e, f, false);
+    };
+
+    var $ = function(s) { return d.getElementById('sp-prefs-'+s); };
+    if($('setup')) return;
+
+    var styleNode = GM_addStyle('\
+        #sp-prefs-setup { position:fixed;z-index:2147483647;top:30px;right:60px;padding:20px 30px;background:#eee;width:500px;border:1px solid black; }\
+        #sp-prefs-setup * { color:black;text-align:left;line-height:normal;font-size:12px; }\
+        #sp-prefs-setup a { color:black;text-decoration:underline; }\
+        #sp-prefs-setup div { text-align:center;font-weight:bold;font-size:14px; }\
+        #sp-prefs-setup ul { margin:15px 0 15px 0;padding:0;list-style:none;background:#eee;border:0; }\
+        #sp-prefs-setup input, #sp-prefs-setup select { border:1px solid gray;padding:2px;background:white; }\
+        #sp-prefs-setup li { margin:0;padding:6px 0;vertical-align:middle;background:#eee;border:0 }\
+        #sp-prefs-setup button { width:150px;margin:0 10px;text-align:center;}\
+        #sp-prefs-setup textarea { width:98%; height:60px; margin:3px 0; }\
+        #sp-prefs-setup b { font-weight: bold; font-family: "微软雅黑", sans-serif; }\
+        #sp-prefs-setup button:disabled { color: graytext; }\
+    ');
+
+    var div = d.createElement('div');
+    div.id = 'sp-prefs-setup';
+    d.body.appendChild(div);
+    div.innerHTML = '\
+        <div>Super_preloaderPlus_one 设置</div>\
+            <ul>\
+                <li>当前版本为 <b>' + scriptInfo.version + ' </b>，上次更新时间为 <b>'+ scriptInfo.updateTime + '</b>\
+                    <a id="sp-prefs-homepageURL" target="_blank" href="' + scriptInfo.homepageURL + '"/>脚本主页</a>\
+                </li>\
+                <li><input type="checkbox" id="sp-prefs-debug" /> 调试模式</li>\
+                <li><input type="checkbox" id="sp-prefs-dblclick_pause" /> 鼠标双击暂停翻页（默认为 Ctrl + 长按左键）</li>\
+                <li><input type="checkbox" id="sp-prefs-enableHistory" /> 添加下一页到历史记录</li>\
+                <li title="下一页的链接设置成在新标签页打开"><input type="checkbox" id="sp-prefs-forceTargetWindow" /> 新标签打开链接</li>\
+                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-useiframe" /> 在预读模式下，默认启用 iframe 方式</li>\
+                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-a_enable" /> 默认启用自动翻页 </li>\
+                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-a_force_enable" /> 自动翻页默认启用强制拼接</li>\
+                <li>自定义排除列表：\
+                    <div><textarea id="sp-prefs-excludes" placeholder="自定义排除列表，支持通配符。\n例如：http://*.douban.com/*"></textarea></div>\
+                </li>\
+                <li>自定义站点规则：\
+                    <div><textarea id="sp-prefs-custom_siteinfo" placeholder="自定义站点规则"></textarea></div>\
+                </li>\
+            </ul>\
+        <div><button id="sp-prefs-ok">确定</button><button id="sp-prefs-cancel">取消</button></div>';
+    div = null;
+
+    var close = function() {
+        if (styleNode) {
+            styleNode.parentNode.removeChild(styleNode);
+        }
+        var div = $('setup');
+        div.parentNode.removeChild(div);
+    };
+
+    on($('ok'), 'click', function(){
+        GM_setValue('enableHistory', prefs.enableHistory = !!$('enableHistory').checked);
+        GM_setValue('forceTargetWindow', prefs.forceTargetWindow = !!$('forceTargetWindow').checked);
+        GM_setValue('SITEINFO_D.useiframe', SITEINFO_D.useiframe = !!$('SITEINFO_D-useiframe').checked);
+        GM_setValue('SITEINFO_D.autopager.enable', SITEINFO_D.autopager.enable = !!$('SITEINFO_D-a_enable').checked);
+        GM_setValue('SITEINFO_D.autopager.force_enable', SITEINFO_D.autopager.force_enable = !!$('SITEINFO_D-a_force_enable').checked);
+
+        GM_setValue('debug', xbug = !!$('debug').checked);
+        debug = xbug ? console.log.bind(console) : function() {};
+
+        GM_setValue('dblclick_pause', $('dblclick_pause').checked);
+        GM_setValue('excludes', prefs.excludes = $('excludes').value);
+        GM_setValue('custom_siteinfo', prefs.custom_siteinfo = $('custom_siteinfo').value);
+
+        SP.loadSetting();
+
+        close();
+    });
+
+    on($('cancel'), 'click', close);
+
+    $('debug').checked = xbug;
+    $('enableHistory').checked = prefs.enableHistory;
+    $('forceTargetWindow').checked = prefs.forceTargetWindow;
+    $('dblclick_pause').checked = GM_getValue('dblclick_pause') || false;
+    $('SITEINFO_D-useiframe').checked = SITEINFO_D.useiframe;
+    $('SITEINFO_D-a_enable').checked = SITEINFO_D.autopager.enable;
+    $('SITEINFO_D-a_force_enable').checked = SITEINFO_D.autopager.force_enable;
+    $('excludes').value = prefs.excludes;
+    $('custom_siteinfo').value = prefs.custom_siteinfo;
+
+};
+
+var isUpdating = true;
+function checkUpdate(button) {
+    if (isUpdating) {
+        return;
+    }
+
+    button.innerHTML = '正在更新中...';
+    button.disabled = 'disabled';
+
+    var reset = function() {
+    	isUpdating = false;
+    	button.innerHTML = '马上更新';
+    	button.disabled = '';
+    };
+
+    GM_xmlhttpRequest({
+        method: "GET",
+        url: scriptInfo.metaUrl,
+        onload: function(response) {
+            var txt = response.responseText;
+            var curVersion = scriptInfo.version;
+            var latestVersion = txt.match(/@\s*version\s*([\d\.]+)\s*/i);
+            if (latestVersion) {
+                latestVersion = latestVersion[1];
+            } else {
+                alert('解析版本号错误');
+                return;
+            }
+
+            //对比版本号
+            var needUpdate;
+            var latestVersions = latestVersion.split('.');
+            var lVLength = latestVersions.length;
+            var currentVersion = curVersion.split('.');
+            var cVLength = currentVersion.length;
+            var lV_x;
+            var cV_x;
+            for (var i = 0; i < lVLength; i++) {
+                lV_x = Number(latestVersions[i]);
+                cV_x = (i >= cVLength) ? 0 : Number(currentVersion[i]);
+                if (lV_x > cV_x) {
+                    needUpdate = true;
+                    break;
+                } else if (lV_x < cV_x) {
+                    break;
+                }
+            }
+
+            if (needUpdate) {
+                alert('本脚本从版本 ' + scriptInfo.version + '  更新到了版本 ' + latestVersion + '.\n请点击脚本主页进行安装');
+                document.getElementById("sp-prefs-homepageURL").boxShadow = '0 0 2px 2px #FF5555';
+            }
+
+            reset();
+        }
+    });
+
+	setTimeout(reset, 30 * 1000);
+}
+
+
 //----------------------------------
 // main.js
 
@@ -3907,7 +4074,7 @@ var SP = {
                 console.error('自定义站点规则错误', prefs.custom_siteinfo);
                 // alert('自定义站点规则错误');
             }
-            
+
             if (_.isArray(infos)) {
                 SITEINFO = infos.concat(SITEINFO);
             }
@@ -3918,145 +4085,6 @@ var SP = {
         loadCustomSiteInfo();
     },
 };
-
-var setup = function(){
-    var d = document;
-    var on = function(node, e, f) {
-        node.addEventListener(e, f, false);
-    };
-
-    var $ = function(s) { return d.getElementById('sp-prefs-'+s); };
-    if($('setup')) return;
-
-    var styleNode = GM_addStyle('\
-        #sp-prefs-setup { position:fixed;z-index:2147483647;top:30px;right:60px;padding:20px 30px;background:#eee;width:500px;border:1px solid black; }\
-        #sp-prefs-setup * { color:black;text-align:left;line-height:normal;font-size:12px; }\
-        #sp-prefs-setup a { color:black;text-decoration:underline; }\
-        #sp-prefs-setup div { text-align:center;font-weight:bold;font-size:14px; }\
-        #sp-prefs-setup ul { margin:15px 0 15px 0;padding:0;list-style:none;background:#eee;border:0; }\
-        #sp-prefs-setup input, #sp-prefs-setup select { border:1px solid gray;padding:2px;background:white; }\
-        #sp-prefs-setup li { margin:0;padding:6px 0;vertical-align:middle;background:#eee;border:0 }\
-        #sp-prefs-setup button { width:150px;margin:0 10px;text-align:center; }\
-        #sp-prefs-setup textarea { width:98%; height:60px; margin:3px 0; }\
-        #sp-prefs-setup b { font-weight: bold; font-family: "微软雅黑", sans-serif; }\
-    ');
-
-    var div = d.createElement('div');
-    div.id = 'sp-prefs-setup';
-    d.body.appendChild(div);
-    div.innerHTML = '\
-        <div>Super_preloaderPlus_one 设置</div>\
-            <ul>\
-                <li>当前版本为 <b>' + scriptInfo.version + ' </b>，上次更新时间为 <b>'+ scriptInfo.updateTime
-                    + '</b><button id="sp-prefs-checkUpdate" style="width:auto;">更新</button>\
-                    <a id="sp-prefs-homepageURL" target="_blank" href="' + scriptInfo.homepageURL + '"/>脚本主页</a>\
-                </li>\
-                <li><input type="checkbox" id="sp-prefs-debug" /> 调试模式</li>\
-                <li><input type="checkbox" id="sp-prefs-dblclick_pause" /> 鼠标双击暂停翻页（默认为 Ctrl + 长按左键）</li>\
-                <li><input type="checkbox" id="sp-prefs-enableHistory" /> 添加下一页到历史记录</li>\
-                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-useiframe" /> 在预读模式下，默认启用 iframe 方式</li>\
-                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-a_enable" /> 默认启用自动翻页 </li>\
-                <li><input type="checkbox" id="sp-prefs-SITEINFO_D-a_force_enable" /> 自动翻页默认启用强制拼接</li>\
-                <li>自定义排除列表：\
-                    <div><textarea id="sp-prefs-excludes" placeholder="自定义排除列表，支持通配符。\n例如：http://*.douban.com/*"></textarea></div>\
-                </li>\
-                <li>自定义站点规则：\
-                    <div><textarea id="sp-prefs-custom_siteinfo" placeholder="自定义站点规则"></textarea></div>\
-                </li>\
-            </ul>\
-        <div><button id="sp-prefs-ok">确定</button><button id="sp-prefs-cancel">取消</button></div>';
-    div = null;
-
-    var close = function() {
-        if (styleNode) {
-            styleNode.parentNode.removeChild(styleNode);
-        }
-        var div = $('setup');
-        div.parentNode.removeChild(div);
-    };
-
-    on($('ok'), 'click', function(){
-        GM_setValue('enableHistory', prefs.enableHistory = !!$('enableHistory').checked);
-        GM_setValue('SITEINFO_D.useiframe', SITEINFO_D.useiframe = !!$('SITEINFO_D-useiframe').checked);
-        GM_setValue('SITEINFO_D.autopager.enable', SITEINFO_D.autopager.enable = !!$('SITEINFO_D-a_enable').checked);
-        GM_setValue('SITEINFO_D.autopager.force_enable', SITEINFO_D.autopager.force_enable = !!$('SITEINFO_D-a_force_enable').checked);
-
-        GM_setValue('debug', xbug = !!$('debug').checked);
-        debug = xbug ? console.log.bind(console) : function() {};
-
-        GM_setValue('dblclick_pause', $('dblclick_pause').checked);
-        GM_setValue('excludes', prefs.excludes = $('excludes').value);
-        GM_setValue('custom_siteinfo', prefs.custom_siteinfo = $('custom_siteinfo').value);
-
-        SP.loadSetting();
-
-        close();
-    });
-
-    on($('cancel'), 'click', close);
-
-    $('checkUpdate').onclick = checkUpdate;
-    $('debug').checked = xbug;
-    $('enableHistory').checked = prefs.enableHistory;
-    $('dblclick_pause').checked = GM_getValue('dblclick_pause') || false;
-    $('SITEINFO_D-useiframe').checked = SITEINFO_D.useiframe;
-    $('SITEINFO_D-a_enable').checked = SITEINFO_D.autopager.enable;
-    $('SITEINFO_D-a_force_enable').checked = SITEINFO_D.autopager.force_enable;
-    $('excludes').value = prefs.excludes;
-    $('custom_siteinfo').value = prefs.custom_siteinfo;
-
-    // 打开设置自动检查更新
-    checkUpdate();
-};
-
-var isUpdating = true;
-function checkUpdate() {
-    if (isUpdating) {
-        return;
-    }
-
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: scriptInfo.metaUrl,
-        onload: function(response) {
-            var txt = response.responseText;
-            var curVersion = scriptInfo.version;
-            var latestVersion = txt.match(/@\s*version\s*([\d\.]+)\s*/i);
-            if (latestVersion) {
-                latestVersion = latestVersion[1];
-            } else {
-                alert('解析版本号错误');
-                return;
-            }
-
-            //对比版本号
-            var needUpdate;
-            var latestVersion = latestVersion.split('.');
-            var lVLength = latestVersion.length;
-            var currentVersion = curVersion.split('.');
-            var cVLength = currentVersion.length;
-            var lV_x;
-            var cV_x;
-            for (var i = 0; i < lVLength; i++) {
-                lV_x = Number(latestVersion[i]);
-                cV_x = (i >= cVLength) ? 0 : Number(currentVersion[i]);
-                if (lV_x > cV_x) {
-                    needUpdate = true;
-                    break;
-                } else if (lV_x < cV_x) {
-                    break;
-                }
-            }
-
-            if (needUpdate) {
-                alert('本脚本从版本 ' + scriptInfo.version + '  更新到了版本 ' + latestVersion + '.\n请点击脚本主页进行安装');
-                document.getElementById("sp-prefs-homepageURL").boxShadow = '0 0 2px 2px #FF5555';
-            }
-
-            isUpdating = false;
-        }
-    });
-}
 
 
 function init(window, document) {
@@ -5175,6 +5203,17 @@ function init(window, document) {
                 imgs = getAllElements('css;img[src]', fragment); //收集所有图片
             }
 
+            // 处理下一页内容部分链接是否新标签页打开
+            if (prefs.forceTargetWindow) {
+                var arr = Array.prototype.slice.call(fragment.querySelectorAll('a[href]:not([href^="mailto:"]):not([href^="javascript:"]):not([href^="#"])'));
+                arr.forEach(function (elem){
+                    elem.setAttribute('target', '_blank');
+                    if (elem.getAttribute('onclick') == 'atarget(this)') {  // 卡饭论坛的控制是否在新标签页打开
+                        elem.removeAttribute('onclick');
+                    }
+                });
+            }
+
             var sepdiv = createSep(lastUrl, cplink, nextlink);
             if (pageElements[0] && pageElements[0].tagName == 'TR') {
                 var insertParent = insertPoint.parentNode;
@@ -5358,7 +5397,7 @@ function init(window, document) {
             });
         }
 
-        function scroll() {                
+        function scroll() {
             if (!pause && !working && (getRemain() <= SSS.a_remain || ipagesmode)) {
                 if (doc) { //有的话,就插入到文档.
                     beforeInsertIntoDoc();
@@ -5545,7 +5584,7 @@ function init(window, document) {
     var nextlink;
     var prelink;
     //===============
-    
+
     var SSS = {};
 
     var findCurSiteInfo = function() {
@@ -5557,7 +5596,7 @@ function init(window, document) {
 
         debug('高级规则数量:', ii);
 
-        for (i = 0; i < ii; i++) {
+        for (var i = 0; i < ii; i++) {
             SII = SITEINFO[i];
             Rurl = toRE(SII.url);
             if (Rurl.test(url)) {
@@ -5676,7 +5715,7 @@ function init(window, document) {
     };
 
     findCurSiteInfo();
-    
+
     //上下页都没有找到啊
     if (!nextlink && !prelink) {
         debug('未找到相关链接, JS执行停止. 共耗时' + (new Date() - startTime) + '毫秒');
@@ -5767,7 +5806,7 @@ function init(window, document) {
     };
 
     loadLocalSetting();
-    
+
     if (!SSS.hasRule) {
         SSS.a_force = true;
     }
@@ -6407,7 +6446,7 @@ var TweenEase = [
 // ====================  functions  ==============================
 
 function gmCompatible() {
-    
+
     GM_addStyle = function(css, id){
         var s = document.createElement('style');
         if (id) {
@@ -6559,7 +6598,7 @@ function handleLazyImgSrc(rule, doc) {
             if (newSrc && newSrc != img.src) {
                 img.setAttribute("src", newSrc);
                 img.removeAttribute(attr);
-            } 
+            }
         });
     });
 }
@@ -6915,7 +6954,7 @@ function xToString(x) {
 function toRE(obj) {
     if (obj instanceof RegExp) {
         return obj;
-    } else if (obj instanceof Array) {  
+    } else if (obj instanceof Array) {
         return new RegExp(obj[0], obj[1]);
     } else {
         if (obj.search(/^wildc;/i) === 0) {
@@ -6935,4 +6974,5 @@ function wildcardToRegExpStr(urlstr) {
 
 
 SP.init();
+
 })();

@@ -1,6 +1,6 @@
 网页
     Google, https://www.google.com.hk/search?q=%s&ie=utf-8&oe=utf-8
-    百度, http://www.baidu.com/s?wd=%s&ie=utf-8
+    百度, https://www.baidu.com/s?wd=%s&ie=utf-8
     360, http://www.so.com/s?ie=utf-8&q=%s
     bing, https://cn.bing.com/search?q=%s&pc=OPER
     搜狗, http://www.sogou.com/web?query=%s
@@ -75,4 +75,5 @@
 
 etc
     AMO, https://addons.mozilla.org/zh-CN/firefox/search/?q=%s
-    射手字幕, http://shooter.cn/search/%s
+    // 射手字幕, http://www.shooter.cn/search/%s
+    字幕, http://www.subom.net/search/%s

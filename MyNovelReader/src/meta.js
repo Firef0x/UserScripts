@@ -27,6 +27,7 @@
 
 // @include        http://read.qidian.com/*,*.aspx
 // @include        http://readbook.qidian.com/bookreader/*,*.html
+// @include        http://wwwploy.qidian.com/BookReader/*,*.aspx
 // @include        http://free.qidian.com/Free/ReadChapter.aspx?*
 // @include        http://www.qdmm.com/BookReader/*,*.aspx
 // @include        http://www.qdwenxue.com/BookReader/*,*.aspx
@@ -87,6 +88,8 @@
 // @include        http://www.23zw.com/olread/*/*/*.html
 // @include        http://www.50zw.com/book_*/*.html
 // @include        http://www.xiangcunxiaoshuo.com/shu/*/*.html
+// @include        http://www.lwxs520.com/books/*/*/*.html
+// @include        http://www.zashu.net/books/*/*/*.html
 
 // www.sodu.so
 // @include        http://www.jiaodu8.com/*/*/*/*.html
@@ -112,6 +115,7 @@
 // @include        http://www.d586.com/*/*/
 // @include        http://www.bookgew.com/Html/Book/*/*/*.htm
 // @include        http://read.shuhaha.com/Html/Book/*/*/*.html
+// @include        http://www.shuhaha.com/Html/Book/*/*/*.html
 // @include        http://www.biqi.me/files/article/html/*/*/*.html
 // @include        http://www.ttzw.com/book/*/*.html
 // @include        http://www.uukanshu.com/*/*/*.html
@@ -226,6 +230,7 @@
 // @include        http://www.caihongwenxue.com/Html/Book/*/*/*.html
 // @include        http://www.shushuw.cn/shu/*/*.html
 // @include        http://www.78xs.com/article/*/*/*.shtml
+// @include        http://www.miaobige.com/book/*/*.html
 
 // @exclude        */List.htm
 // @exclude        */List.html
