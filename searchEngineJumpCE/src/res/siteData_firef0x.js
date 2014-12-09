@@ -2,7 +2,7 @@
     Google, https://www.google.com.hk/search?hl=en-US&newwindow=1&nfpr=1&safe=off&ie=utf-8&oe=utf-8&q=%s
     // Google, https://www.google.com/ncr#num=30&newwindow=1&safe=off&hl=zh-CN&q=%s
     // wen.lu, https://wen.lu/search?q=%s&hl=zh-CN&safe=off&ie=utf-8, www.google.com.hk
-    // awk.so, https://awk.so/#num=30&newwindow=1&q=%s&hl=zh-CN&safe=off&ie=utf-8, www.google.com.hk
+    // awk.so, https://awk.so/#num=30&newwindow=1&q=%s&hl=en-US&nfpr=1&safe=off&ie=utf-8&oe=utf-8, www.google.com.hk
     百度, https://www.baidu.com/s?wd=%s&ie=utf-8
     必应, https://cn.bing.com/search?q=%s
     360, http://www.so.com/s?ie=utf-8&q=%s
