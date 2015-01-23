@@ -3,6 +3,7 @@
     // Google, https://www.google.com/ncr#num=30&newwindow=1&safe=off&hl=zh-CN&q=%s
     // wen.lu, https://wen.lu/search?q=%s&hl=zh-CN&safe=off&ie=utf-8, www.google.com.hk
     // awk.so, https://awk.so/#num=30&newwindow=1&q=%s&hl=en-US&nfpr=1&safe=off&ie=utf-8&oe=utf-8, www.google.com.hk
+    // glgoo.com, https://e.glgoo.com/search?q=%s&hl=en-US&nfpr=1&safe=off&ie=utf-8&oe=utf-8, www.google.com.hk
     百度, https://www.baidu.com/s?wd=%s&ie=utf-8
     必应, https://cn.bing.com/search?q=%s
     360, http://www.so.com/s?ie=utf-8&q=%s
@@ -109,7 +110,7 @@
     AUR, https://aur.archlinux.org/packages/?O=0&K=%s, www.archlinux.org
 
 翻译
-    google翻译, https://translate.google.com.hk/?q=%s
+    google翻译, http://translate.google.cn/?q=%s
     百度翻译, http://fanyi.baidu.com/#auto/zh/%s
     有道翻译, http://fanyi.youdao.com/translate?i=%s
     bing 翻译, http://www.bing.com/translator/?&text=%s&from=&to=zh-chs

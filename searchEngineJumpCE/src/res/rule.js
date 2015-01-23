@@ -42,24 +42,40 @@ var rules = [
         // 自定义样式
         stylish: '',
     },
-    {name: "wen.lu网页搜索",
+    // 以下两个搜索引擎已经挂了，因而禁用
+    // {name: "wen.lu网页搜索",
+    //     enabled: true,
+    //     url: /^https?:\/\/wen\.lu\//i,
+    //     engineList: 'web',
+    //     style: '\
+    //         border-bottom: 1px solid #E5E5E5;\
+    //         border-top: 1px solid #E5E5E5;\
+    //         padding-left: 135px;\
+    //         ',
+    //     insertIntoDoc: {
+    //         keyword: '//input[@name="q"]',
+    //         target: 'css;#rcnt',
+    //         where: 'beforeBegin',
+    //     },
+    // },
+    // {name: "awk.so网页搜索",
+    //     enabled: true,
+    //     url: /^https?:\/\/awk\.so\//i,
+    //     engineList: 'web',
+    //     style: '\
+    //         border-bottom: 1px solid #E5E5E5;\
+    //         border-top: 1px solid #E5E5E5;\
+    //         padding-left: 135px;\
+    //         ',
+    //     insertIntoDoc: {
+    //         keyword: '//input[@name="q"]',
+    //         target: 'css;#rcnt',
+    //         where: 'beforeBegin',
+    //     },
+    // },
+    {name: "glgoo网页搜索",
         enabled: true,
-        url: /^https?:\/\/wen\.lu\//i,
-        engineList: 'web',
-        style: '\
-            border-bottom: 1px solid #E5E5E5;\
-            border-top: 1px solid #E5E5E5;\
-            padding-left: 135px;\
-            ',
-        insertIntoDoc: {
-            keyword: '//input[@name="q"]',
-            target: 'css;#rcnt',
-            where: 'beforeBegin',
-        },
-    },
-    {name: "awk.so网页搜索",
-        enabled: true,
-        url: /^https?:\/\/awk\.so\//i,
+        url: /^https?:\/\/e\.glgoo\.com\/(?:webhp|search|#|$|\?)/i,
         engineList: 'web',
         style: '\
             border-bottom: 1px solid #E5E5E5;\
