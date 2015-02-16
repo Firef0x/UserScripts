@@ -97,7 +97,7 @@
         kickass, https://kickass.to/usearch/%s/
         btspread, http://www.btspread.com/search/%s
         torrentkitty, http://www.torrentkitty.org/search/%s
-        BTDigg, https://btdigg.org/search?q=%s
+        BTDigg, http://btdigg.info/s/%s
         手撕包菜, http://bt.shousibaocai.com/list/%s/1
 
 软件
